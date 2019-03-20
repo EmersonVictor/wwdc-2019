@@ -1,16 +1,17 @@
 import SpriteKit
 
-public class CharacterNode: SKSpriteNode {
+public class ObjectNode: SKSpriteNode {
     
     // MARK: - Properties
-    var loveLevel: LoveLevel = .empty
+    var userDidPlayed: Bool = false
     
     // MARK: - Initializer
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
-    // TODO: - Show love level
-    // TODO: - Did play animation
+    // MARK: - Give a hint
+    public func giveHint() {
+        print("TODO: Give a hint")
+    }
 }
-

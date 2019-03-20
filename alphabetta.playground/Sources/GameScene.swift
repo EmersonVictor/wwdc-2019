@@ -6,27 +6,24 @@ public class GameScene: SKScene {
     
     // MARK: - Nodes
     // Characters
-    var alphaNode: CharacterNode!
-    var bettaNode: CharacterNode!
+    var alphaNode: AlphaNode!
+    var bettaNode: BettaNode!
     // Objects
     var objectsContainer: ObjectsContainerNode!
-    var rattle: SKSpriteNode!
-    var flute: SKSpriteNode!
+    var rattle: ObjectNode!
+    var flute: ObjectNode!
     var singBtn: SKSpriteNode!
-    
-    // MARK: - Variables
-    var bettaPlayTimes = 0 {
-        didSet {
-            if self.bettaPlayTimes == 2 {
-                // TODO: - Show sing button
-            }
-        }
-    }
     
     // MARK: - View initializer 
     override public func didMove(to view: SKView) {
         // Reload scene textures
         self.reloadTextures()
+        
+        // Remove user interaction
+        self.isUserInteractionEnabled = false
+        
+        // Add conversation
+        self.startConversation()
         
         // Setup custom font
 //        let fontURL = Bundle.main.url(forResource: "Assets/Font/PaytoneOne", withExtension: "ttf") as! CFURL
@@ -45,21 +42,21 @@ public class GameScene: SKScene {
         self.objectsContainer.texture = SKTexture(imageNamed: "Assets/UI/objectsContainer")
         
         // Rattle
-        self.rattle = self.childNode(withName: "rattle") as! SKSpriteNode
+        self.rattle = self.childNode(withName: "rattle") as! ObjectNode
         self.rattle.texture = SKTexture(imageNamed: "Assets/Scenario/rattle")
         
         // Flute
-        self.flute = self.childNode(withName: "flute") as! SKSpriteNode
+        self.flute = self.childNode(withName: "flute") as! ObjectNode
         self.flute.texture = SKTexture(imageNamed: "Assets/Scenario/flute")
         
         /// Characters
         // Alpha
-        self.alphaNode = self.childNode(withName: "alpha") as! CharacterNode
-        self.alphaNode.texture = SKTexture(imageNamed: "Assets/Characters/Alpha/alpha")
+        self.alphaNode = self.childNode(withName: "alpha") as! AlphaNode
+        self.alphaNode.texture = SKTexture(imageNamed: "Assets/Characters/alpha")
         
         // Betta
-        self.bettaNode = self.childNode(withName: "betta") as! CharacterNode
-        self.bettaNode.texture = SKTexture(imageNamed: "Assets/Characters/Betta/betta")
+        self.bettaNode = self.childNode(withName: "betta") as! BettaNode
+        self.bettaNode.texture = SKTexture(imageNamed: "Assets/Characters/betta")
     }
     
     // MARK: - Touch event
@@ -68,15 +65,12 @@ public class GameScene: SKScene {
             // Get touch location
             let touchLocation = touch.location(in: self)
             
-            // Create move action
-            var moveAction: SKAction
+            // Move alpha
             if touchLocation.x > 115 {
-                moveAction = SKAction.moveTo(x: 115, duration: 0.5)
+                self.alphaNode.walkTo(x: 115)
             } else {
-                moveAction = SKAction.moveTo(x: touchLocation.x, duration: 0.5)
+                self.alphaNode.walkTo(x: touchLocation.x)
             }
-            
-            self.alphaNode.run(moveAction)
             
             // Check if player touched objects
             let nodesInTouch = self.nodes(at: touchLocation)
@@ -84,19 +78,29 @@ public class GameScene: SKScene {
             if nodesInTouch.contains(self.rattle) {
                 // Touch in rattle
                 self.didTouch(in: self.rattle)
-                self.bettaPlayTimes += 1
+                print("TODO: Update rattle hint timer")
             } else if nodesInTouch.contains(self.flute) {
                 // Touch in flute
                 self.didTouch(in: self.flute)
-                self.bettaPlayTimes += 1
+                print("TODO: Update flute hint timer")
             } else if nodesInTouch.contains(self.bettaNode) {
                 self.playWithBetta()
             }
         }
     }
     
+    // MARK: - Start initial conversation
+    public func startConversation() {
+        print("TODO: Conversation")
+        self.isUserInteractionEnabled = true
+        print("TODO: Timer para brinquedo")
+    }
+    
+    
     // MARK: - Touch in object action
-    public func didTouch(in object: SKSpriteNode) {
+    public func didTouch(in object: ObjectNode) {
+        object.userDidPlayed = true
+        
         if !self.objectsContainer.hasObjectInside {
             self.objectsContainer.add(newObject: object)
         }
@@ -109,7 +113,23 @@ public class GameScene: SKScene {
             self.objectsContainer.removeObjectInside()
         }
         
-        // Run betta animation
-        // TODO: - Betta animation
+        // Betta animation
+        print("TODO: Betta animation")
+        
+        // Check if Betta played with all objects
+        if self.flute.userDidPlayed && self.rattle.userDidPlayed {
+            print("TODO: Show sign button")
+        }
+    }
+    
+    // MARK: - Sing button
+    public func showSingButton() {
+        print("TODO: Show sing button")
+    }
+    
+    public func didTouchSingButton() {
+        print("TODO: Alpha sing to betta")
+        print("TODO: Heart animation")
+        print("TODO: Last conversation")
     }
 }
