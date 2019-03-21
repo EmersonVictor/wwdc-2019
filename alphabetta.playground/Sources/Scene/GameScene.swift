@@ -43,7 +43,7 @@ public class GameScene: SKScene {
         /// Characters
         // Alpha
         self.alphaNode = self.childNode(withName: "alpha") as! AlphaNode
-        self.alphaNode.texture = SKTexture(imageNamed: "Assets/Characters/alphaSadWalk/sad-walk0")
+        self.alphaNode.texture = SKTexture(imageNamed: "Assets/Characters/sadWalk/sad-walk0")
         
         // Betta
         self.bettaNode = self.childNode(withName: "betta") as! BettaNode
@@ -94,9 +94,9 @@ public class GameScene: SKScene {
         // Check if Betta played with all objects
         if self.flute.userDidPlayed && self.rattle.userDidPlayed {
             self.bettaNode.loveLevel = .two
-            self.alphaNode.happinessLevel = .fine
         
             self.bettaNode.showLoveLevel {
+                self.alphaNode.happinessLevel = .fine
                 let bettaSpeakPosition = CGPoint(x: self.bettaNode.position.x + 80, y: self.bettaNode.position.y + 60)
                 self.bettaNode.speak(conversationNumber: 4, withDuration: 5, atPosition: bettaSpeakPosition) {
                     self.showSingButton()
@@ -104,7 +104,6 @@ public class GameScene: SKScene {
             }
         } else if self.flute.userDidPlayed || self.rattle.userDidPlayed {
             self.bettaNode.loveLevel = .one
-            print(self.bettaNode.loveLevel)
             self.bettaNode.showLoveLevel {
                 self.alphaNode.happinessLevel = .normal
             }
@@ -119,13 +118,15 @@ public class GameScene: SKScene {
         self.singBtn = SKSpriteNode(texture: texture, size: CGSize(width: texture.size().width/2, height: texture.size().height/2))
         
         self.singBtn.position = CGPoint(x: self.alphaNode.position.x - 50, y: self.alphaNode.position.y)
+        self.singBtn.alpha = 0
         
         self.addChild(self.singBtn)
-        
+        self.singBtn.run(SKAction.fadeIn(withDuration: 0.3))
     }
     
     // MARK: - Last conversation and finish
     public func finishScene() {
+        self.isUserInteractionEnabled = false
         print("TODO: #1 Last conversation")
     }
 }

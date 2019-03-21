@@ -11,15 +11,23 @@ public class AlphaNode: SKSpriteNode {
     // MARK: - Properties
     var happinessLevel: HappinessLevel = .sad {
         didSet {
-            print("TODO: #1 Change sprite acroding to happinness level")
-            print("Animate happiness level changing")
+            print("TODO: #2 Show stars")
+            switch self.happinessLevel {
+            case .sad:
+                self.texture = self.sadTextures[0]
+            case .normal:
+                self.texture = self.normalTextures[0]
+            case .fine:
+                self.texture = self.fineTextures[0]
+            case .happy:
+                self.texture = SKTexture(imageNamed: "Assets/Characters/happy")
+            }
         }
     }
     
     // MARK: - Initializer
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        
         self.loadSprites()
     }
     
@@ -27,13 +35,13 @@ public class AlphaNode: SKSpriteNode {
     public func loadSprites() {
         for i in 0...3 {
             // Sad
-            self.sadTextures.append(SKTexture(imageNamed: "Assets/Characters/alphaSadWalk/sad-walk\(i)"))
+            self.sadTextures.append(SKTexture(imageNamed: "Assets/Characters/sadWalk/sad-walk\(i)"))
             
             // Normal
-            self.normalTextures.append(SKTexture(imageNamed: "Assets/Characters/alphaNormalWalk/normal-walk\(i)"))
+            self.normalTextures.append(SKTexture(imageNamed: "Assets/Characters/normalWalk/normal-walk\(i)"))
             
             // Fine
-            self.fineTextures.append(SKTexture(imageNamed: "Assets/Characters/alphaFineWalk/fine-walk\(i)"))
+            self.fineTextures.append(SKTexture(imageNamed: "Assets/Characters/fineWalk/fine-walk\(i)"))
         }
     }
     
@@ -83,6 +91,30 @@ public class AlphaNode: SKSpriteNode {
     }
     
     public func sing(completion: @escaping () -> ()) {
-        print("TODO: #1 Sing animation")
+        // Change sprite
+        self.texture = SKTexture(imageNamed: "Assets/Characters/sing")
+        
+        // Create music notes node
+        let texture = SKTexture(imageNamed: "Assets/Scenario/musicNotes")
+        let notes = SKSpriteNode(texture: texture, size: CGSize(width: texture.size().width/2, height: texture.size().height/2))
+        
+        notes.position = CGPoint(x: self.position.x + 40, y: self.position.y + 80)
+        notes.alpha = 0
+        
+        self.scene?.addChild(notes)
+        
+        let sequence = SKAction.sequence([
+                SKAction.fadeIn(withDuration: 0.3),
+                SKAction.repeat(SKAction.sequence([
+                    SKAction.moveTo(y: self.position.y + 85, duration: 1),
+                    SKAction.moveTo(y: self.position.y + 80, duration: 1)]), count: 2),
+                SKAction.fadeOut(withDuration: 0.3)
+            ])
+        
+        notes.run(sequence) {
+            self.happinessLevel = .happy
+            notes.removeFromParent()
+            completion()
+        }
     }
 }

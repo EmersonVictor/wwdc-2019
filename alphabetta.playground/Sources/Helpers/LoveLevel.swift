@@ -1,5 +1,5 @@
 import Foundation
 
-enum LoveLevel: String {
+public enum LoveLevel: String {
     case empty, one, two, full
 }

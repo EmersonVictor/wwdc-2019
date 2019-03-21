@@ -30,7 +30,7 @@ extension GameScene {
                 } else if nodesInTouch.contains(self.bettaNode) {
                     self.playWithBetta()
                 }
-                
+
                 self.isUserInteractionEnabled = true
             }
         } else {
@@ -56,9 +56,10 @@ extension GameScene {
         self.alphaNode.sing {
             self.bettaNode.loveLevel = .full
             self.bettaNode.showLoveLevel(completion: {
-                    self.alphaNode.happinessLevel = .happy
-                    self.finishScene()
+                self.alphaNode.happinessLevel = .happy
+                self.finishScene()
             })
         }
+        self.singBtn.removeFromParent()
     }
 }

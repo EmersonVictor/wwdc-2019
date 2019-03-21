@@ -1,5 +1,5 @@
 import Foundation
 
-enum HappinessLevel: String {
+public enum HappinessLevel: String {
     case sad, normal, fine, happy
 }
