@@ -9,9 +9,4 @@ public class ObjectNode: SKSpriteNode {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
-    
-    // MARK: - Give a hint
-    public func giveHint() {
-        print("TODO: Give a hint")
-    }
 }

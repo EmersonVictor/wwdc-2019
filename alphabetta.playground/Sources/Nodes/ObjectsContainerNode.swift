@@ -6,10 +6,8 @@ public class ObjectsContainerNode: SKSpriteNode {
     var objectInside: SKSpriteNode? {
         didSet {
             if let _ = self.objectInside {
-                print("apareceu")
                 self.run(SKAction.fadeIn(withDuration: 0.3))
             } else {
-                print("escondeu")
                 self.run(SKAction.fadeAlpha(to: 0.4, duration: 0.3))
             }
         }
