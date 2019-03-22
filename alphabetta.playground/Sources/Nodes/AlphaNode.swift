@@ -11,7 +11,24 @@ public class AlphaNode: SKSpriteNode {
     // MARK: - Properties
     var happinessLevel: HappinessLevel = .sad {
         didSet {
-            print("TODO: #2 Show stars")
+            // Create and add stars
+            let texture = SKTexture(imageNamed: "Assets/Scenario/stars")
+            let stars = SKSpriteNode(texture: texture, size: CGSize(width: texture.size().width/2, height: texture.size().height/2))
+            
+            stars.alpha = 0
+            stars.position = CGPoint(x: self.position.x + 36, y: self.position.y + 70)
+            
+            self.scene?.addChild(stars)
+            
+            let sequence = SKAction.sequence([
+                SKAction.fadeIn(withDuration: 0.3),
+                SKAction.fadeOut(withDuration: 0.3),])
+            
+            stars.run(SKAction.repeat(sequence, count: 2)) {
+                stars.removeFromParent()
+            }
+            
+            // Change alpha sprite
             switch self.happinessLevel {
             case .sad:
                 self.texture = self.sadTextures[0]
@@ -20,7 +37,7 @@ public class AlphaNode: SKSpriteNode {
             case .fine:
                 self.texture = self.fineTextures[0]
             case .happy:
-                self.texture = SKTexture(imageNamed: "Assets/Characters/happy")
+                self.texture = SKTexture(imageNamed: "Assets/Characters/Alpha/happy")
             }
         }
     }
@@ -35,13 +52,13 @@ public class AlphaNode: SKSpriteNode {
     public func loadSprites() {
         for i in 0...3 {
             // Sad
-            self.sadTextures.append(SKTexture(imageNamed: "Assets/Characters/sadWalk/sad-walk\(i)"))
+            self.sadTextures.append(SKTexture(imageNamed: "Assets/Characters/Alpha/sadWalk/sad-walk\(i)"))
             
             // Normal
-            self.normalTextures.append(SKTexture(imageNamed: "Assets/Characters/normalWalk/normal-walk\(i)"))
+            self.normalTextures.append(SKTexture(imageNamed: "Assets/Characters/Alpha/normalWalk/normal-walk\(i)"))
             
             // Fine
-            self.fineTextures.append(SKTexture(imageNamed: "Assets/Characters/fineWalk/fine-walk\(i)"))
+            self.fineTextures.append(SKTexture(imageNamed: "Assets/Characters/Alpha/fineWalk/fine-walk\(i)"))
         }
     }
     
@@ -92,7 +109,7 @@ public class AlphaNode: SKSpriteNode {
     
     public func sing(completion: @escaping () -> ()) {
         // Change sprite
-        self.texture = SKTexture(imageNamed: "Assets/Characters/sing")
+        self.texture = SKTexture(imageNamed: "Assets/Characters/Alpha/sing")
         
         // Create music notes node
         let texture = SKTexture(imageNamed: "Assets/Scenario/musicNotes")

@@ -1,57 +1,76 @@
 import SpriteKit
 
 public class GameScene: SKScene {
-    
     // MARK: - Nodes
     // Characters
     var alphaNode: AlphaNode!
     var bettaNode: BettaNode!
-    // Objects
+    // Toys
     var objectsContainer: ObjectsContainerNode!
-    var rattle: ObjectNode!
+    var dice: ObjectNode!
     var flute: ObjectNode!
+    var genius: ObjectNode!
+    var rattle: ObjectNode!
+    // Sing button
     var singBtn: SKSpriteNode!
+    // Box
+    var box: SKSpriteNode!
     
-    // MARK: - View initializer 
+    // MARK: - Interface initializer
     override public func didMove(to view: SKView) {
         // Reload scene textures
         self.reloadTextures()
         
         // Add conversation
-        self.startConversation()
+        self.startInitialConversation()
     }
     
-    // MARK: - Reload scene textures
+    // Reload scene textures
     public func reloadTextures() {
         //// Scenario
         let scenario = self.childNode(withName: "scenario") as! SKSpriteNode
         scenario.texture = SKTexture(imageNamed: "Assets/Scenario/scenario")
+        
+        let table = self.childNode(withName: "table") as! SKSpriteNode
+        table.texture = SKTexture(imageNamed: "Assets/Scenario/table")
         
         /// Objects
         // Objects container
         self.objectsContainer = self.childNode(withName: "objectsContainer") as! ObjectsContainerNode
         self.objectsContainer.texture = SKTexture(imageNamed: "Assets/UI/objectsContainer")
         
-        // Rattle
-        self.rattle = self.childNode(withName: "rattle") as! ObjectNode
-        self.rattle.texture = SKTexture(imageNamed: "Assets/Scenario/rattle")
+        // Box
+        self.box = childNode(withName: "box") as! SKSpriteNode
+        self.box.texture = SKTexture(imageNamed: "Assets/Scenario/box")
+        
+        // Dice
+        self.dice = self.childNode(withName: "dice") as! ObjectNode
+        self.dice.texture = SKTexture(imageNamed: "Assets/Scenario/dice")
         
         // Flute
         self.flute = self.childNode(withName: "flute") as! ObjectNode
         self.flute.texture = SKTexture(imageNamed: "Assets/Scenario/flute")
         
+        // Genius
+        self.genius = self.childNode(withName: "genius") as! ObjectNode
+        self.genius.texture = SKTexture(imageNamed: "Assets/Scenario/genius")
+        
+        // Rattle
+        self.rattle = self.childNode(withName: "rattle") as! ObjectNode
+        self.rattle.texture = SKTexture(imageNamed: "Assets/Scenario/rattle")
+        
         /// Characters
         // Alpha
         self.alphaNode = self.childNode(withName: "alpha") as! AlphaNode
-        self.alphaNode.texture = SKTexture(imageNamed: "Assets/Characters/sadWalk/sad-walk0")
+        self.alphaNode.texture = SKTexture(imageNamed: "Assets/Characters/Alpha/sadWalk/sad-walk0")
         
         // Betta
         self.bettaNode = self.childNode(withName: "betta") as! BettaNode
-        self.bettaNode.texture = SKTexture(imageNamed: "Assets/Characters/betta")
+        self.bettaNode.texture = SKTexture(imageNamed: "Assets/Characters/Betta/betta")
     }
     
     // MARK: - Start initial conversation
-    public func startConversation() {
+    public func startInitialConversation() {
         // Remove user interaction
         self.isUserInteractionEnabled = false
         
@@ -79,36 +98,30 @@ public class GameScene: SKScene {
                 let bettaSpeakPosition = CGPoint(x: self.bettaNode.position.x - 80, y: self.bettaNode.position.y + 60)
                 self.bettaNode.speak(conversationNumber: 3, withDuration: 4, atPosition: bettaSpeakPosition, completion: {
                     self.isUserInteractionEnabled = true
+                    self.showInstruction(withNumber: 1)
                 })
             })
         }
     }
     
-    // MARK: - Play with betta
-    public func playWithBetta() {
-        // Remove object of container
-        if self.objectsContainer.hasObjectInside {
-            self.objectsContainer.removeObjectInside()
-        }
+    // MARK: - Show intructions for user
+    public func showInstruction(withNumber number: Int) {
+        let texture = SKTexture(imageNamed: "Assets/Speak/instruction\(number)")
+        let instruction = SKSpriteNode(texture: texture, size: CGSize(width: texture.size().width/2, height: texture.size().height/2))
         
-        // Check if Betta played with all objects
-        if self.flute.userDidPlayed && self.rattle.userDidPlayed {
-            self.bettaNode.loveLevel = .two
+        instruction.alpha = 0
+        instruction.position = CGPoint(x: 143, y: 130)
         
-            self.bettaNode.showLoveLevel {
-                self.alphaNode.happinessLevel = .fine
-                let bettaSpeakPosition = CGPoint(x: self.bettaNode.position.x + 80, y: self.bettaNode.position.y + 60)
-                self.bettaNode.speak(conversationNumber: 4, withDuration: 5, atPosition: bettaSpeakPosition) {
-                    self.showSingButton()
-                }
-            }
-        } else if self.flute.userDidPlayed || self.rattle.userDidPlayed {
-            self.bettaNode.loveLevel = .one
-            self.bettaNode.showLoveLevel {
-                self.alphaNode.happinessLevel = .normal
-            }
-        } else {
-            self.bettaNode.showLoveLevel()
+        self.addChild(instruction)
+        
+        let sequence = SKAction.sequence([
+            SKAction.fadeIn(withDuration: 0.3),
+            SKAction.wait(forDuration: 6),
+            SKAction.fadeOut(withDuration: 0.3)
+            ])
+        
+        instruction.run(sequence) {
+            instruction.removeFromParent()
         }
     }
     
@@ -122,11 +135,20 @@ public class GameScene: SKScene {
         
         self.addChild(self.singBtn)
         self.singBtn.run(SKAction.fadeIn(withDuration: 0.3))
+        self.isUserInteractionEnabled = true
     }
     
     // MARK: - Last conversation and finish
     public func finishScene() {
         self.isUserInteractionEnabled = false
-        print("TODO: #1 Last conversation")
+        
+        let bettaSpeakPosition = CGPoint(x: self.bettaNode.position.x + 80, y: self.bettaNode.position.y + 60)
+        self.bettaNode.speak(conversationNumber: 5, withDuration: 3, atPosition: bettaSpeakPosition, completion: {
+            
+            let alphaSpeakPosition = CGPoint(x: self.alphaNode.position.x - 90, y: self.alphaNode.position.y + 60)
+            self.alphaNode.speak(conversationNumber: 6, withDuration: 3, atPosition: alphaSpeakPosition, completion: {
+                self.run(SKAction.fadeOut(withDuration: 3))
+            })
+        })
     }
 }

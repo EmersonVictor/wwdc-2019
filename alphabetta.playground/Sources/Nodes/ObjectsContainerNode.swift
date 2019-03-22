@@ -3,8 +3,11 @@ import SpriteKit
 public class ObjectsContainerNode: SKSpriteNode {
     
     // MARK: - Properties
+    private(set) var numberOfInteractedObjects: Int = 0
+    
     var objectInside: SKSpriteNode? {
         didSet {
+            // Animation
             if let _ = self.objectInside {
                 self.run(SKAction.fadeIn(withDuration: 0.3))
             } else {
@@ -12,6 +15,7 @@ public class ObjectsContainerNode: SKSpriteNode {
             }
         }
     }
+    
     var hasObjectInside: Bool {
         get {
             if let _ = self.objectInside {
@@ -20,6 +24,7 @@ public class ObjectsContainerNode: SKSpriteNode {
             return false
         }
     }
+    
     
     // MARK: - Initializer
     required init?(coder aDecoder: NSCoder) {
@@ -30,15 +35,15 @@ public class ObjectsContainerNode: SKSpriteNode {
     func add(newObject object: SKSpriteNode) {
         // Add object to container
         self.objectInside = object
+        self.numberOfInteractedObjects += 1
         
         // Remove object
         object.run(SKAction.fadeOut(withDuration: 0.05)) {
             // Show at object inside
             object.removeFromParent()
             object.zRotation = 0
-            object.position = CGPoint(x: 0, y: 14)
-            self.addChild(object)
-            
+            object.position = CGPoint(x: self.position.x, y: self.position.y + 18)
+            self.scene?.addChild(object)
             object.run(SKAction.fadeIn(withDuration: 0.4))
         }
     }
@@ -49,5 +54,6 @@ public class ObjectsContainerNode: SKSpriteNode {
             self.removeAllChildren()
         })
         self.objectInside = nil
+        
     }
 }

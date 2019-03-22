@@ -3,7 +3,7 @@ import SpriteKit
 public class BettaNode: SKSpriteNode {
     
     // MARK: - Properties
-    var loveLevel: LoveLevel = .empty
+    var loveLevel: Int = 0
     
     // MARK: - Initializer
     required init?(coder aDecoder: NSCoder) {
@@ -33,7 +33,7 @@ public class BettaNode: SKSpriteNode {
     
     public func showLoveLevel(completion: @escaping () -> () = { }) {
         // Create node
-        var texture = SKTexture(imageNamed: "Assets/Scenario/\(self.loveLevel.rawValue)Love")
+        let texture = SKTexture(imageNamed: "Assets/Characters/Betta/LoveLevel/love\(self.loveLevel)")
         let node = SKSpriteNode(texture: texture, size: CGSize(width: texture.size().width/2, height: texture.size().height/2))
         
         node.position = CGPoint(x: self.position.x, y: self.position.y + 55)
