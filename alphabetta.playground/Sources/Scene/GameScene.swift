@@ -23,6 +23,9 @@ public class GameScene: SKScene {
         
         // Add conversation
         self.startInitialConversation()
+        
+        // Play background
+        Player.shared.playAudio(fileNamed: "Assets/Sounds/Pizzicato Polka Inspirations for PlayGround", in: self, withVolume: 0.2, withName: "background")
     }
     
     // Reload scene textures
@@ -148,6 +151,7 @@ public class GameScene: SKScene {
             let alphaSpeakPosition = CGPoint(x: self.alphaNode.position.x - 90, y: self.alphaNode.position.y + 60)
             self.alphaNode.speak(conversationNumber: 6, withDuration: 3, atPosition: alphaSpeakPosition, completion: {
                 self.run(SKAction.fadeOut(withDuration: 3))
+                Player.shared.removeAudio(withName: "background", from: self, withFadeDuration: 3)
             })
         })
     }

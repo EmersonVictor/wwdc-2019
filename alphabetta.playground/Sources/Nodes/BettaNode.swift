@@ -40,6 +40,7 @@ public class BettaNode: SKSpriteNode {
         node.alpha = 0
         
         self.scene?.addChild(node)
+        Player.shared.playSfx(fileName: "Assets/Sounds/Light.mp3", in: node)
         
         // Show
         let sequence = SKAction.sequence([

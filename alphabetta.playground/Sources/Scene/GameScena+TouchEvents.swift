@@ -57,6 +57,7 @@ extension GameScene {
     // Object interaction
     public func didInteract(withObject object: ObjectNode) {
         if !self.objectsContainer.hasObjectInside {
+            Player.shared.playSfx(fileName: "Assets/Sounds/Plunky.mp3", in: self.objectsContainer)
             object.userDidPlayed = true
             self.objectsContainer.add(newObject: object)
         }

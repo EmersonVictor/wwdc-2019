@@ -107,7 +107,7 @@ public class AlphaNode: SKSpriteNode {
         }
     }
     
-    public func sing(completion: @escaping () -> ()) {
+    public func sing(completion: @escaping () -> ()) {        
         // Change sprite
         self.texture = SKTexture(imageNamed: "Assets/Characters/Alpha/sing")
         
